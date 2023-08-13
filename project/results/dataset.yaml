@@ -1,0 +1,11 @@
+names:
+- bio
+- glass
+- metals_and_plastics
+- non_recyclable
+- other
+- paper
+- unknown
+test: /home/almogbs/Deep-Learning-HW4/project/dataset/test/images
+train: /home/almogbs/Deep-Learning-HW4/project/dataset/train/images
+val: /home/almogbs/Deep-Learning-HW4/project/dataset/val/images

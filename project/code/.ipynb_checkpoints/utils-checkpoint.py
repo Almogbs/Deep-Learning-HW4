@@ -1,3 +1,5 @@
+from pycocotools.coco import COCO
+
 import seaborn as sns; sns.set()
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -7,7 +9,14 @@ import cv2
 import os
 
 
-def display_random_images_and_annotations(coco_obj, images_dir, num_images_to_display=6, rows=2, cols=3):
+def display_random_images_and_annotations(coco_obj: COCO, images_dir: str, num_images_to_display: int=6, rows: int=2, cols: int=3) -> None:
+    """
+    @param coco_obj: COCO object
+    @param image_dir: image dir path
+    @param num_images_to_display: number of images to display
+    @param rows: rows in the grid
+    @param cols: cols in the grid
+    """
     image_ids = coco_obj.getImgIds()
     random.shuffle(image_ids)
 
@@ -45,7 +54,10 @@ def display_random_images_and_annotations(coco_obj, images_dir, num_images_to_di
     plt.show()
 
 
-def get_info_from_coco_obj(coco):
+def get_info_from_coco_obj(coco: COCO) -> None:
+    """
+    @param coco: COCO object
+    """
     cat_ids = coco.getCatIds()
     image_ids = coco.getImgIds()
     annotation_ids = coco.getAnnIds()
@@ -59,7 +71,10 @@ def get_info_from_coco_obj(coco):
     print("Number of annotations in the dataset:", num_annotations)
 
 
-def get_category_histogram_from_coco_obj(coco):
+def get_category_histogram_from_coco_obj(coco: COCO) -> None:
+    """
+    @param coco: COCO object
+    """
     cat_ids = coco.getCatIds()
     annotation_ids = coco.getAnnIds()
 
