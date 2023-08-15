@@ -1,4 +1,5 @@
 import yaml
+import os
 
 def map_to_new_categories(cat_id: int, cat_names: dict, categories_inverted: dict, categories_idx: dict) -> int:
     """
@@ -46,6 +47,10 @@ def convert_taco_annotations_to_yaml(yolo_dataset_path: str, output_yaml: str, n
         'test': yolo_dataset_path + "/test/images",
         'names': class_names
     }
+    try:
+        os.makedirs(os.getcwd() + f"/project/results")
+    except FileExistsError as e:
+        pass
 
     with open(output_yaml, 'w') as yaml_file:
         yaml.dump(yaml_dict, yaml_file)

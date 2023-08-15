@@ -1,5 +1,7 @@
 from ultralytics import YOLO
+import shutil
 import json
+import os
 
 
 def get_model():
@@ -19,34 +21,45 @@ def get_trained_model(dir: str, name: str, output_yaml: str, params: dict = {}) 
     @return: yolo trained model
     """
     try:
-        model = YOLO(f"./runs/detect/{dir}/weights/best.pt")
+        model = YOLO(os.getcwd() + f"/project/results/{dir}/weights/best.pt")
         print(f"Cached {name} model was found!")
         return model
     except FileNotFoundError as e:
         print(f"No cached {name} model was found! Training:")
         model = get_model()
         # Train the model
-        results = model.train(data=output_yaml, epochs=100, imgsz=640, cache=True, name=dir, **params)
+        results = model.train(data=output_yaml, imgsz=640, cache=True, name=dir, **params)
+        try:
+            os.makedirs(os.getcwd() + f"/project/results/{dir}/weights")
+        except FileExistsError as e:
+            pass
+
+        try:
+            shutil.copyfile(os.getcwd() + f"/runs/detect/{dir}/results.png", os.getcwd() + f"/project/results/{dir}/results.png")
+            shutil.copyfile(os.getcwd() + f"/runs/detect/{dir}/weights/best.pt", os.getcwd() + f"/project/results/{dir}/weights/best.pt")
+        except FileNotFoundError as e:
+            shutil.copyfile(os.getcwd() + f"/runs/detect/{dir}2/results.png", os.getcwd() + f"/project/results/{dir}/results.png")
+            shutil.copyfile(os.getcwd() + f"/runs/detect/{dir}2/weights/best.pt", os.getcwd() + f"/project/results/{dir}/weights/best.pt")
         return model
 
 
-def get_model_res_dict(dir: str, name: str, model: YOLO) -> dict:
+def get_model_res_dict(dir: str, name: str, model: YOLO, set: str="val") -> dict:
     """
     @param dir: model dir name
     @param name: model name
     @param model: yolo trained model
-    @return: res_dict with mAP50 and mAP50-95
+    @return: res_dict with mAP50 and mAP50-95 on set
     """
     res_dict = {}
 
     try:
-        res_dict = json.load(open(f'./runs/detect/{dir}/test_res.json', 'r'))
-        print(f"Cached {name} model rest results found!")
+        res_dict = json.load(open(os.getcwd() + f'/project/results/{dir}/{set}_res.json', 'r'))
+        print(f"Cached {name} model {set} results found!")
     except FileNotFoundError as e:
-        print(f"Cached {name} model rest results not found! Evaluating:")
-        res = model.val(split='test') 
+        print(f"Cached {name} model {set} results not found! Evaluating:")
+        res = model.val(split=set) 
         res_dict["mAP50-95"] = res.box.map
         res_dict["mAP50"] = res.box.map50
-        json.dump(res_dict, open(f'./runs/detect/{dir}/test_res.json', 'w'))
+        json.dump(res_dict, open(os.getcwd() + f'/project/results/{dir}/{set}_res.json', 'w'))
 
     return res_dict

@@ -95,3 +95,38 @@ def get_category_histogram_from_coco_obj(coco: COCO) -> None:
     plot_1 = sns.barplot(x="Number of annotations", y="Categories", data=df,
                 label="Total", color="b")
 
+
+def plot_heat_map(results: list, acc: str, p1: str, p2: str) -> None:
+    """
+    @param results:  
+    @param acc: 
+    @param p1: 
+    @param p2: 
+    """
+    p1_values = [result[1] for result in results]
+    p2_values = [result[2] for result in results]
+    accuracy_values = [result[0][acc] for result in results]
+
+    unique_p1 = sorted(list(set(p1_values)))
+    unique_p2 = sorted(list(set(p2_values)))
+
+    p1_idx = {val: idx for idx, val in enumerate(unique_p1)}
+    p2_idx = {val: idx for idx, val in enumerate(unique_p2)}
+
+    accuracy_grid = np.zeros((len(unique_p2), len(unique_p1)))
+
+    for pp1, pp2, accuracy in zip(p1_values, p2_values, accuracy_values):
+        p1_idx_val = p1_idx[pp1]
+        p2_idx_val = p2_idx[pp2]
+        accuracy_grid[p2_idx_val, p1_idx_val] = accuracy
+
+    plt.figure(figsize=(10, 6))
+    plt.imshow(accuracy_grid, cmap='viridis', interpolation='nearest', aspect='auto')
+    plt.colorbar(label=acc)
+    plt.xticks(np.arange(len(unique_p1)), unique_p1, rotation=45)
+    plt.yticks(np.arange(len(unique_p2)), unique_p2)
+    plt.xlabel(p1)
+    plt.ylabel(p2)
+    plt.title(f'Accuracy Heatmap for {p1} and {p2}')
+    plt.show()
+
