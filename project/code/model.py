@@ -20,6 +20,10 @@ def get_trained_model(dir: str, name: str, output_yaml: str, params: dict = {}) 
     @param params: extra params for the training
     @return: yolo trained model
     """
+    #hacky but necessary in order to be able to not save the weights...
+    #if os.path.exists(os.getcwd() + f"/project/results/{dir}/results.png"):
+    #    return None
+    
     try:
         model = YOLO(os.getcwd() + f"/project/results/{dir}/weights/best.pt")
         print(f"Cached {name} model was found!")

@@ -130,3 +130,17 @@ def plot_heat_map(results: list, acc: str, p1: str, p2: str) -> None:
     plt.title(f'Accuracy Heatmap for {p1} and {p2}')
     plt.show()
 
+
+def find_best_parameters(results: list, acc: str) -> dict:
+    best_result = None
+    best_parameters = None
+    
+    for result in results:
+        model_result, lr0, batch = result
+        # Assuming your model_result contains the evaluation metric or score
+        if best_result is None or model_result[acc] > best_result:
+            best_result = model_result[acc]
+            best_parameters = {'lr0': lr0, 'batch': batch}
+    
+    return best_parameters
+
