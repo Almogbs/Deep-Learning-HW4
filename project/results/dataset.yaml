@@ -6,6 +6,6 @@ names:
 - other
 - paper
 - unknown
-test: /home/almogbs/Deep-Learning-HW4/project/dataset/test/images
-train: /home/almogbs/Deep-Learning-HW4/project/dataset/train/images
-val: /home/almogbs/Deep-Learning-HW4/project/dataset/val/images
+test: /home/almogbs/tmp/Deep-Learning-HW4/project/dataset/test/images
+train: /home/almogbs/tmp/Deep-Learning-HW4/project/dataset/train/images
+val: /home/almogbs/tmp/Deep-Learning-HW4/project/dataset/val/images

@@ -71,9 +71,10 @@ def get_info_from_coco_obj(coco: COCO) -> None:
     print("Number of annotations in the dataset:", num_annotations)
 
 
-def get_category_histogram_from_coco_obj(coco: COCO) -> None:
+def get_category_histogram_from_coco_obj(coco: COCO) -> list:
     """
     @param coco: COCO object
+    @returns: cat names
     """
     cat_ids = coco.getCatIds()
     annotation_ids = coco.getAnnIds()
@@ -94,6 +95,8 @@ def get_category_histogram_from_coco_obj(coco: COCO) -> None:
 
     plot_1 = sns.barplot(x="Number of annotations", y="Categories", data=df,
                 label="Total", color="b")
+
+    return cat_names
 
 
 def plot_heat_map(results: list, acc: str, p1: str, p2: str) -> None:
